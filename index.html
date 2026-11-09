@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fartle</title>
+<meta name="description" content="Get to FART in as few steps as possible. A new starting word every day.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <button id="btn-help" class="icon" aria-label="How to play">?</button>
+  <h1>Fartle</h1>
+  <div class="right">
+    <button id="btn-sound" class="icon" aria-label="Toggle sound"></button>
+    <button id="btn-stats" class="icon" aria-label="Stats">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><rect x="4" y="12" width="4" height="8" rx="1"/><rect x="10" y="4" width="4" height="16" rx="1"/><rect x="16" y="9" width="4" height="11" rx="1"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <p id="goal">Get to <b>FART</b> in as few steps as possible</p>
+  <div id="board" aria-live="polite"></div>
+  <div id="toast" role="status"></div>
+  <div id="actions">
+    <button id="btn-undo" class="ghost">↩ Undo</button>
+    <span id="steps">Steps: 0</span>
+  </div>
+  <div id="keyboard"></div>
+  <p id="next"></p>
+</main>
+
+<div id="modal" class="hidden" role="dialog" aria-modal="true">
+  <div class="card">
+    <button id="modal-close" class="close" aria-label="Close">✕</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script src="words.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
