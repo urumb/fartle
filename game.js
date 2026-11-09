@@ -118,10 +118,10 @@
   function submit() {
     if (save.won) return;
     if (cur.length < 4) { toast("Not enough letters"); shake(); return; }
-    if (!VALID.has(cur)) { toast("Not in the word list"); shake(); return; }
     const d = diffCount(cur, last());
     if (d === 0) { toast("Change one letter!"); shake(); return; }
-    if (d > 1) { toast("Only ONE letter can change"); shake(); return; }
+    if (d > 1) { toast("Change only one letter"); shake(); return; }
+    if (!VALID.has(cur)) { toast("Not in the word list"); shake(); return; }
     save.path.push(cur); cur = "";
     if (save.path[save.path.length - 1] === TARGET) win();
     store.set("fartle-save", save);
