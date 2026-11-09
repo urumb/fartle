@@ -1,4 +1,4 @@
-# Fartle
+# FARTLE
 
 A daily word-ladder game. Get to **FART** in as few steps as possible, changing exactly one letter each move, and every step must be a real word. A new starting word is picked every day.
 

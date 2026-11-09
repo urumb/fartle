@@ -1,7 +1,7 @@
 (() => {
   "use strict";
   const TARGET = "fart";
-  const EPOCH = Date.UTC(2026, 10, 9); // Fartle #1 = 9 Nov 2026
+  const EPOCH = Date.UTC(2026, 10, 9); // FARTLE #1 = 9 Nov 2026
   const WORDS = window.WORDS;
   const VALID = new Set(WORDS);
 
@@ -210,7 +210,7 @@
     return `<div class="row">${[...w].map((c, i) => `<div class="tile ${i === diffAt ? "diff" : ""}">${c}</div>`).join("")}</div>`;
   }
   function showHelp() {
-    openModal(`<h2>How to play Fartle</h2>
+    openModal(`<h2>How to play FARTLE</h2>
       <p class="muted">Clear the room in as few moves as you can.</p>
       <p class="lead">Get to “FART” in as few steps as possible</p>
       <p>Each word must be exactly one letter different from the last:</p>
@@ -226,7 +226,7 @@
   function showStats() { openModal(`<h2>Stats</h2>${statsHtml()}<p id="next-modal" style="text-align:center;color:var(--muted)"></p>`); }
   function shareText() {
     const steps = save.path.length;
-    return `Fartle #${DAY}\n${steps} step${steps === 1 ? "" : "s"} (best possible: ${PAR})\n${[START, ...save.path].join(" > ").toUpperCase()}`;
+    return `FARTLE #${DAY}\n${steps} step${steps === 1 ? "" : "s"} (best possible: ${PAR})\n${[START, ...save.path].join(" > ").toUpperCase()}`;
   }
   function showResult() {
     const steps = save.path.length;
@@ -250,8 +250,8 @@
     const n = new Date(), m = new Date(n.getFullYear(), n.getMonth(), n.getDate() + 1);
     let s = Math.floor((m - n) / 1000);
     const f = n => String(n).padStart(2, "0");
-    const txt = `Next Fartle in ${Math.floor(s / 3600)}:${f(Math.floor(s / 60) % 60)}:${f(s % 60)}`;
-    $("next").textContent = `Fartle #${DAY} · ${txt}`;
+    const txt = `Next FARTLE in ${Math.floor(s / 3600)}:${f(Math.floor(s / 60) % 60)}:${f(s % 60)}`;
+    $("next").textContent = `FARTLE #${DAY} · ${txt}`;
     if (dayNumber() !== DAY && s > 86300) location.reload();
   }
   setInterval(tick, 1000); tick();
