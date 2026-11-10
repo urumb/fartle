@@ -1,4 +1,4 @@
-const CACHE = 'fartle-v1';
+const CACHE = 'fartle-v2';
 const ASSETS = ['./', 'index.html', 'style.css', 'words.js', 'game.js',
   'manifest.webmanifest', 'icons/icon.svg', 'icons/maskable.svg'];
 

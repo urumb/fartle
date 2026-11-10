@@ -252,6 +252,7 @@
     const f = n => String(n).padStart(2, "0");
     const txt = `Next FARTLE in ${Math.floor(s / 3600)}:${f(Math.floor(s / 60) % 60)}:${f(s % 60)}`;
     $("next").textContent = `FARTLE #${DAY} · ${txt}`;
+    const nm = $("next-modal"); if (nm) nm.textContent = txt;
     if (dayNumber() !== DAY && s > 86300) location.reload();
   }
   setInterval(tick, 1000); tick();
