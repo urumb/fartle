@@ -1,6 +1,7 @@
-const CACHE = 'fartle-v2';
+const CACHE = 'fartle-v4';
 const ASSETS = ['./', 'index.html', 'style.css', 'words.js', 'game.js',
-  'manifest.webmanifest', 'icons/icon.svg', 'icons/maskable.svg'];
+  'manifest.webmanifest', 'icons/icon.svg', 'icons/maskable.svg',
+  'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));

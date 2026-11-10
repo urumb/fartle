@@ -181,18 +181,22 @@
     if (muted) return;
     try {
       ac = ac || new (window.AudioContext || window.webkitAudioContext)();
-      const t = ac.currentTime, dur = 0.9;
-      const o = ac.createOscillator(), g = ac.createGain(), lfo = ac.createOscillator(), lg = ac.createGain();
+      if (ac.state === "suspended") ac.resume();
+      const t = ac.currentTime + 0.02, dur = 0.8;
+      const o = ac.createOscillator(), g = ac.createGain(), lp = ac.createBiquadFilter();
+      const lfo = ac.createOscillator(), lg = ac.createGain();
       o.type = "sawtooth";
-      o.frequency.setValueAtTime(140, t);
-      o.frequency.exponentialRampToValueAtTime(48, t + dur);
-      lfo.frequency.setValueAtTime(38, t); lfo.frequency.linearRampToValueAtTime(18, t + dur);
-      lg.gain.value = 40;
+      // phone speakers cannot play very low notes, so stay in a range they can
+      o.frequency.setValueAtTime(190, t);
+      o.frequency.exponentialRampToValueAtTime(95, t + dur);
+      lfo.frequency.setValueAtTime(32, t); lfo.frequency.linearRampToValueAtTime(18, t + dur);
+      lg.gain.value = 22;                       // flutter depth, always stays positive
       lfo.connect(lg); lg.connect(o.frequency);
-      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.5, t + 0.04);
-      g.gain.setValueAtTime(0.5, t + dur - 0.25); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-      o.connect(g); g.connect(ac.destination);
-      o.start(t); lfo.start(t); o.stop(t + dur); lfo.stop(t + dur);
+      lp.type = "lowpass"; lp.frequency.value = 900;
+      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.25, t + 0.05);
+      g.gain.setValueAtTime(0.25, t + dur - 0.25); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(lp); lp.connect(g); g.connect(ac.destination);
+      o.start(t); lfo.start(t); o.stop(t + dur + 0.05); lfo.stop(t + dur + 0.05);
     } catch {}
   }
   $("btn-sound").addEventListener("click", () => {
@@ -251,7 +255,7 @@
     let s = Math.floor((m - n) / 1000);
     const f = n => String(n).padStart(2, "0");
     const txt = `Next FARTLE in ${Math.floor(s / 3600)}:${f(Math.floor(s / 60) % 60)}:${f(s % 60)}`;
-    $("next").textContent = `FARTLE #${DAY} · ${txt}`;
+    $("next").textContent = txt;
     const nm = $("next-modal"); if (nm) nm.textContent = txt;
     if (dayNumber() !== DAY && s > 86300) location.reload();
   }
