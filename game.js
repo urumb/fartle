@@ -177,26 +177,32 @@
 
   // ---------- fart sound ----------
   let ac;
+  // Soft win chime: a rising C-major arpeggio of gentle sine "bells" that fade out smoothly.
+  // Pre-computed into a buffer so it sounds the same on every device.
+  function makeChime(sr) {
+    const notes = [523.25, 659.25, 783.99, 1046.5], gap = 0.12, ring = 1.1;
+    const n = Math.floor(sr * (gap * (notes.length - 1) + ring)), out = new Float32Array(n);
+    notes.forEach((f, idx) => {
+      const start = Math.floor(idx * gap * sr), len = Math.floor(ring * sr);
+      for (let i = 0; i < len && start + i < n; i++) {
+        const t = i / sr;
+        const env = Math.min(1, t / 0.012) * Math.exp(-t * 4.2);     // soft attack, smooth decay
+        const w = Math.sin(2 * Math.PI * f * t) + 0.18 * Math.sin(4 * Math.PI * f * t);
+        out[start + i] += w * env * 0.2;
+      }
+    });
+    for (let i = 0; i < n; i++) { const left = (n - i) / (0.05 * sr); if (left < 1) out[i] *= left; }
+    return out;
+  }
   function fartSound() {
     if (muted) return;
     try {
       ac = ac || new (window.AudioContext || window.webkitAudioContext)();
       if (ac.state === "suspended") ac.resume();
-      const t = ac.currentTime + 0.02, dur = 0.8;
-      const o = ac.createOscillator(), g = ac.createGain(), lp = ac.createBiquadFilter();
-      const lfo = ac.createOscillator(), lg = ac.createGain();
-      o.type = "sawtooth";
-      // phone speakers cannot play very low notes, so stay in a range they can
-      o.frequency.setValueAtTime(190, t);
-      o.frequency.exponentialRampToValueAtTime(95, t + dur);
-      lfo.frequency.setValueAtTime(32, t); lfo.frequency.linearRampToValueAtTime(18, t + dur);
-      lg.gain.value = 22;                       // flutter depth, always stays positive
-      lfo.connect(lg); lg.connect(o.frequency);
-      lp.type = "lowpass"; lp.frequency.value = 900;
-      g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.25, t + 0.05);
-      g.gain.setValueAtTime(0.25, t + dur - 0.25); g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
-      o.connect(lp); lp.connect(g); g.connect(ac.destination);
-      o.start(t); lfo.start(t); o.stop(t + dur + 0.05); lfo.stop(t + dur + 0.05);
+      const data = makeChime(ac.sampleRate);
+      const buf = ac.createBuffer(1, data.length, ac.sampleRate);
+      buf.copyToChannel(data, 0);
+      const src = ac.createBufferSource(); src.buffer = buf; src.connect(ac.destination); src.start();
     } catch {}
   }
   $("btn-sound").addEventListener("click", () => {
