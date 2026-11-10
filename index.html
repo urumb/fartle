@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>FARTLE</title>
 <meta name="description" content="Get to FART in as few steps as possible. A new starting word every day.">
+<meta name="theme-color" content="#1b1b1b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icons/icon.svg">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -40,5 +44,8 @@
 
 <script src="words.js"></script>
 <script src="game.js"></script>
+<script>
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(() => {});
+</script>
 </body>
 </html>
